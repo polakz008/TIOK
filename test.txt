@@ -1,1 +1,4 @@
 Wywołuje konflikt test1.
+
+Wywołuję konflikt.
+

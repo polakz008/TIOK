@@ -1,14 +1,14 @@
 import cv2
-image = cv2.imread('images/image.png')
-(h, w) = image.shape[:2]
-modified_image = image.copy()
-modified_image[h-1, w-1] = (0, 0, 255)
+import numpy as np
 
-(b, g, r) = modified_image[h-1, w-1]
-print("Pixel at ({}, {}) - Red: {}, Green: {}, Blue: {}".format(w-1, h-1, r, g, b))
+black_image = np.zeros((400, 400, 3), dtype=np.uint8)
 
-cv2.imshow("Original", image)
-cv2.imshow("Modified", modified_image)
+cv2.rectangle(black_image, (0, 0), (100, 50), (0, 255, 0), -1)
 
+cv2.rectangle(black_image, (300, 350), (399, 399), (0, 0, 255), 3)
+
+cv2.imwrite('images/rectangles.jpg', black_image)
+
+cv2.imshow('Rectangles', black_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

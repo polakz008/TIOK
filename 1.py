@@ -1,12 +1,14 @@
 import cv2
-import numpy as np
+
 
 image = cv2.imread('image.png')
 cv2.imshow('Original Image', image)
 
-M = np.float32([[1, 0, 30], [0, 1, 40]])
-shifted = cv2.warpAffine(image, M, (image.shape[1], image.shape[0]))
-cv2.imshow('Shifted Image', shifted)
+(h, w) = image.shape[:2]
+(cX, cY) = (w // 2, h // 2)
+M = cv2.getRotationMatrix2D((cX, cY), 45, 1.0)
+rotated = cv2.warpAffine(image, M, (w, h))
+cv2.imshow("Rotated by 45 Degrees", rotated)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()

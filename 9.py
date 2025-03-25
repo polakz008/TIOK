@@ -1,17 +1,16 @@
 import cv2
 
 image = cv2.imread('image.png')
-cv2.imshow('Original Image', image)
 
-(h, w) = image.shape[:2]
-(cX, cY) = (w // 2, h // 2)
+for scale in range(100, 301, 20):
+    scale_factor = scale / 100.0
+    new_width = int(image.shape[1] * scale_factor)
+    new_height = int(image.shape[0] * scale_factor)
+    dim = (new_width, new_height)
 
-M = cv2.getRotationMatrix2D((cX, cY), 75, 1.0)
-rotated = cv2.warpAffine(image, M, (w, h))
+    resized = cv2.resize(image, dim, interpolation=cv2.INTER_LINEAR)
 
-cv2.imshow("Rotated by 75 Degrees", rotated)
+    cv2.imshow(f"Rozmiar: {scale}%", resized)
+    cv2.waitKey(500)
 
-cv2.imwrite("rotated_output.jpg", rotated)
-
-cv2.waitKey(0)
 cv2.destroyAllWindows()

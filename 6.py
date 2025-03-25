@@ -2,10 +2,11 @@ import cv2
 import imutils
 
 image = cv2.imread('image.png')
-cv2.imshow('Original Image', image)
 
-rotated = imutils.rotate_bound(image, -33)
+resized = imutils.resize(image, height=400)
 
-cv2.imshow("Rotated by -33 Degrees ", rotated)
+cv2.imshow("Oryginalny obraz", image)
+cv2.imshow("Zmieniona wysokosc", resized)
+
 cv2.waitKey(0)
 cv2.destroyAllWindows()

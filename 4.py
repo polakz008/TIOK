@@ -1,23 +1,16 @@
 import cv2
 
-image = cv2.imread('image.png')
+image = cv2.imread("image.png")
 
-new_width = image.shape[1] * 3
-new_height = image.shape[0] * 3
-dim = (new_width, new_height)
+flipped_horizontally = cv2.flip(image, 1)
+flipped_vertically = cv2.flip(image, 0)
+flipped_both = cv2.flip(image, -1)
 
-methods = [
-    ("INTER_NEAREST", cv2.INTER_NEAREST),
-    ("INTER_LINEAR", cv2.INTER_LINEAR),
-    ("INTER_CUBIC", cv2.INTER_CUBIC),
-    ("INTER_LANCZOS4", cv2.INTER_LANCZOS4)
-]
-
-for (name, method) in methods:
-    resized = cv2.resize(image, dim, interpolation=method)
-    cv2.imshow(f"Metoda: {name}", resized)
 
 cv2.imshow("Oryginalny obraz", image)
+cv2.imshow("Odbicie poziome", flipped_horizontally)
+cv2.imshow("Odbicie pionowe", flipped_vertically)
+cv2.imshow("Odbicie względem obu osi", flipped_both)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()

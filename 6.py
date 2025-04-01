@@ -1,12 +1,15 @@
 import cv2
-import imutils
 
-image = cv2.imread('image.png')
+image = cv2.imread("image.png")
 
-resized = imutils.resize(image, height=400)
+choice = int(input("Wybierz sposób odbicia (0 – pionowe, 1 – poziome, -1 – oba): "))
 
-cv2.imshow("Oryginalny obraz", image)
-cv2.imshow("Zmieniona wysokosc", resized)
+if choice in [0, 1, -1]:
+    flipped = cv2.flip(image, choice)
+    print("Odbicie lustrzane wykonane.")
+    cv2.imshow("Obraz po odbiciu", flipped)
+else:
+    print("Niepoprawny wybór!")
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()

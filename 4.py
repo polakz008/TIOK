@@ -1,16 +1,20 @@
 import cv2
 
-image = cv2.imread("image.png")
+image = cv2.imread('image.png')
 
-flipped_horizontally = cv2.flip(image, 1)
-flipped_vertically = cv2.flip(image, 0)
-flipped_both = cv2.flip(image, -1)
+height, width = image.shape[:2]
 
+startX = int(input(f"Podaj startX (0 - {width-1}): "))
+endX = int(input(f"Podaj endX ({startX+1} - {width}): "))
+startY = int(input(f"Podaj startY (0 - {height-1}): "))
+endY = int(input(f"Podaj endY ({startY+1} - {height}): "))
 
-cv2.imshow("Oryginalny obraz", image)
-cv2.imshow("Odbicie poziome", flipped_horizontally)
-cv2.imshow("Odbicie pionowe", flipped_vertically)
-cv2.imshow("Odbicie względem obu osi", flipped_both)
+if not (0 <= startX < endX <= width and 0 <= startY < endY <= height):
+    print("Błąd")
+    exit()
 
+roi = image[startY:endY, startX:endX]
+
+cv2.imshow('Wybrany ROI', roi)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

@@ -1,11 +1,11 @@
 import cv2
 
-image = cv2.imread("image.png")
+image = cv2.imread('image.png')
 
-flipped = cv2.flip(image, 0)
+height = image.shape[0]
+roi = image[height//2:height, :]
 
-cv2.imshow("Oryginalny obraz", image)
-cv2.imshow("Obraz po odbiciu lustrzanym w pionie", flipped)
-
+cv2.imshow('Dolna połowa', roi)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+

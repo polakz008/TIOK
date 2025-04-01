@@ -1,11 +1,10 @@
 import cv2
 
-image = cv2.imread("image.png")
+image = cv2.imread('image.png')
 
-flipped = cv2.flip(image, -1)
+width = image.shape[1]
+roi = image[:, width//2:width]
 
-cv2.imshow("Oryginalny obraz", image)
-cv2.imshow("Obraz po odbiciu lustrzanym względem obu osi", flipped)
-
+cv2.imshow('Prawa połowa', roi)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

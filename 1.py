@@ -2,10 +2,8 @@ import cv2
 
 image = cv2.imread('image.png')
 
-flipped = cv2.flip(image, 1)
+roi = image[0:100, 0:100]
 
-cv2.imshow("Oryginalny obraz", image)
-cv2.imshow("Obraz po odbiciu lustrzanym w poziomie", flipped)
-
+cv2.imshow('ROI', roi)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

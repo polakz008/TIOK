@@ -1,17 +1,17 @@
 import cv2
 
-image = cv2.imread('face.png')
+s1 = cv2.imread("s1.png")
+s2 = cv2.imread("s2.png")
 
-height, width = image.shape[:2]
+s2 = cv2.resize(s2, (s1.shape[1], s1.shape[0]))
 
-startX = int(width * 0.28)
-endX = int(width * 0.72)
-startY = int(height * 0.2)
-endY = int(height * 0.74)
+difference = cv2.absdiff(s1, s2)
 
-cropped_face = image[startY:endY, startX:endX]
+cv2.imshow("Original Image 1", s1)
+cv2.imshow("Original Image 2", s2)
+cv2.imshow("Difference", difference)
 
-cv2.imshow('Przycięta twarz', cropped_face)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
+#Obrazy naszły na siebie oraz są w innych kolorach niż oryginały, wygląda jak trochę jak filtr "negatyw"

@@ -1,19 +1,18 @@
 import cv2
 
-img1 = cv2.imread('bez.png')
-img2 = cv2.imread('z.jpg')
+image = cv2.imread("osoba.png")
 
-img2 = cv2.resize(img2, (img1.shape[1], img1.shape[0]))
+height, width = image.shape[:2]
+masked = image.copy()
 
-gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+eye_rect_w, eye_rect_h = 140, 40
+center_x = width // 2
+center_y = height // 2 - 50
 
-xor_result = cv2.bitwise_xor(gray1, gray2)
+top_left = (center_x - eye_rect_w // 2, center_y - eye_rect_h // 2)
+bottom_right = (center_x + eye_rect_w // 2, center_y + eye_rect_h // 2)
 
-
-cv2.imshow("1", gray1)
-cv2.imshow("2", gray2)
-cv2.imshow("XOR", xor_result)
-
+cv2.rectangle(masked, top_left, bottom_right, (0, 0, 0), -1)
+cv2.imshow("Bez oczu", masked)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

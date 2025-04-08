@@ -1,16 +1,14 @@
 import cv2
 import numpy as np
 
-image = cv2.imread("kwiaty.png")
-hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+image = cv2.imread("osoba.png")
+(B, G, R) = cv2.split(image)
 
-lower_hsv = np.array([140, 50, 50])
-upper_hsv = np.array([170, 255, 255])
-mask = cv2.inRange(hsv, lower_hsv, upper_hsv)
+swapped_image = cv2.merge([R, B, G])
+cv2.imshow("Swapped", swapped_image)
 
-result = cv2.bitwise_and(image, image, mask=mask)
+no_red = cv2.merge([B, G, np.zeros_like(R)])
+cv2.imshow("No Red", no_red)
 
-cv2.imshow("Oryginalny", image)
-cv2.imshow("Ekstrakcja", result)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

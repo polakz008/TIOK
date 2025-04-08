@@ -1,16 +1,37 @@
 import cv2
 import numpy as np
 
-image = cv2.imread("image.png")
+width, height = 400, 400
 
-M_numpy = np.ones(image.shape, dtype="uint8") * 50
-bright_numpy = image + M_numpy
+def draw_triangle(position=(100, 100)):
+    mask = np.zeros((height, width), dtype=np.uint8)
+    triangle_cnt = np.array([
+        [position[0], position[1]],
+        [position[0] + 100, position[1] + 150],
+        [position[0] - 100, position[1] + 150]
+    ])
+    cv2.drawContours(mask, [triangle_cnt], 0, 255, -1)
+    return mask
 
-M_cv2 = np.ones(image.shape, dtype="uint8") * 50
-bright_cv2 = cv2.add(image, M_cv2)
+def draw_circle(center=(200, 200), radius=100):
+    mask = np.zeros((height, width), dtype=np.uint8)
+    cv2.circle(mask, center, radius, 255, -1)
+    return mask
 
-cv2.imshow("Original", image)
-cv2.imshow("NumPy", bright_numpy)
-cv2.imshow("OpenCV", bright_cv2)
+triangle = draw_triangle(position=(300, 100))
+circle = draw_circle(center=(200, 200), radius=100)
+
+bitwise_and = cv2.bitwise_and(triangle, circle)
+bitwise_or = cv2.bitwise_or(triangle, circle)
+bitwise_xor = cv2.bitwise_xor(triangle, circle)
+bitwise_not_triangle = cv2.bitwise_not(triangle)
+
+cv2.imshow("Triangle", triangle)
+cv2.imshow("Circle", circle)
+cv2.imshow("AND", bitwise_and)
+cv2.imshow("OR", bitwise_or)
+cv2.imshow("XOR", bitwise_xor)
+cv2.imshow("NOT Triangle", bitwise_not_triangle)
+
 cv2.waitKey(0)
 cv2.destroyAllWindows()

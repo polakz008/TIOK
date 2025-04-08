@@ -1,12 +1,19 @@
 import cv2
-import numpy as np
 
-image = cv2.imread("image.png")
+img1 = cv2.imread('bez.png')
+img2 = cv2.imread('z.jpg')
 
-M_numpy = np.ones(image.shape, dtype="uint8") * 150
-overexposed_numpy = image + M_numpy
+img2 = cv2.resize(img2, (img1.shape[1], img1.shape[0]))
 
-cv2.imshow("Original", image)
-cv2.imshow("NumPy", overexposed_numpy)
+gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+
+xor_result = cv2.bitwise_xor(gray1, gray2)
+
+
+cv2.imshow("1", gray1)
+cv2.imshow("2", gray2)
+cv2.imshow("XOR", xor_result)
+
 cv2.waitKey(0)
 cv2.destroyAllWindows()

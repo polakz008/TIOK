@@ -1,14 +1,18 @@
 import cv2
-import numpy as np
+image = cv2.imread('szum.png', cv2.IMREAD_GRAYSCALE)
 
-image = cv2.imread("osoba.png")
-(B, G, R) = cv2.split(image)
+_, binary = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
 
-swapped_image = cv2.merge([R, B, G])
-cv2.imshow("Swapped", swapped_image)
+cv2.imshow("Oryginalny obraz z szumem", binary)
 
-no_red = cv2.merge([B, G, np.zeros_like(R)])
-cv2.imshow("No Red", no_red)
+kernel_sizes = [(3, 3), (5, 5), (7, 7)]
+
+for size in kernel_sizes:
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, size)
+    opened = cv2.morphologyEx(binary, cv2.MORPH_OPEN, kernel)
+    cv2.imshow(f"Otwarcie: kernel {size[0]}x{size[1]}", opened)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+#Najlepsza skuteczność w ostatnim wyniku.

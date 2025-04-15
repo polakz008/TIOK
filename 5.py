@@ -1,23 +1,36 @@
 import cv2
-import numpy as np
 
-image = cv2.imread('obraz.png')
-hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+image = cv2.imread('text.png', cv2.IMREAD_GRAYSCALE)
 
-lower_red1 = np.array([0, 100, 100])
-upper_red1 = np.array([10, 255, 255])
-lower_red2 = np.array([160, 100, 100])
-upper_red2 = np.array([179, 255, 255])
+_, binary = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
 
-mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
-mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
-mask = cv2.bitwise_or(mask1, mask2)
+cv2.imshow("Oryginalny obraz", binary)
 
-h, s, v = cv2.split(hsv)
-s = cv2.add(s, 50, mask=mask)
-hsv_enhanced = cv2.merge((h, s, v))
 
-result = cv2.cvtColor(hsv_enhanced, cv2.COLOR_HSV2BGR)
-cv2.imshow('', result)
+kernel_shapes = {
+    "Kwadrat": cv2.MORPH_RECT,
+    "Elipsa": cv2.MORPH_ELLIPSE,
+    "Krzyz": cv2.MORPH_CROSS
+}
+
+kernel_size = (7, 7)
+
+for shape_name, shape_type in kernel_shapes.items():
+    kernel = cv2.getStructuringElement(shape_type, kernel_size)
+
+    eroded = cv2.erode(binary, kernel)
+    dilated = cv2.dilate(binary, kernel)
+    opened = cv2.morphologyEx(binary, cv2.MORPH_OPEN, kernel)
+    closed = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
+    gradient = cv2.morphologyEx(binary, cv2.MORPH_GRADIENT, kernel)
+
+    cv2.imshow(f"Erozja - {shape_name}", eroded)
+    cv2.imshow(f"Dylatacja - {shape_name}", dilated)
+    cv2.imshow(f"Otwarcie - {shape_name}", opened)
+    cv2.imshow(f"Zamkniecie - {shape_name}", closed)
+    cv2.imshow(f"Gradient - {shape_name}", gradient)
+
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+#Nie zauważam różnic przy zmianie kształtu przy rozmiarze 5x5, natomiast gdy już zwiększam do 7x7 to elpisa zaokrągla, krzyż tak pixeluje, a kwadrat wyostrza.

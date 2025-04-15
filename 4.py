@@ -1,11 +1,20 @@
 import cv2
 
-image = cv2.imread('obraz.png')
+image = cv2.imread('text.png', cv2.IMREAD_GRAYSCALE)
 
-B, G, R = cv2.split(image)
-R = cv2.add(R, 100)
-enhanced_image = cv2.merge((B, G, R))
-cv2.imshow('', enhanced_image)
+cv2.imshow("Oryginalny obraz", image)
+
+kernel_shapes = {
+    "Kwadrat": cv2.MORPH_RECT,
+    "Elipsa": cv2.MORPH_ELLIPSE
+}
+
+kernel_size = (24, 24)
+
+for name, shape in kernel_shapes.items():
+    kernel = cv2.getStructuringElement(shape, kernel_size)
+    closed = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
+    cv2.imshow(f"Zamknięcie - {name}", closed)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()

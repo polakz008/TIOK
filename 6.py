@@ -1,16 +1,18 @@
 import cv2
-import numpy as np
 
-image = cv2.imread('opencw.png')
+image = cv2.imread('niepelne.png', cv2.IMREAD_GRAYSCALE)
+cv2.imshow("Original", image)
+kernelSizes = [(15, 15)]
 
-B, G, R = cv2.split(image)
+for kernelSize in kernelSizes:
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, kernelSize)
 
-swapped = cv2.merge((R, G, B))
+    closing = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
+    cv2.imshow("Zamykanie: ({}, {})".format(kernelSize[0], kernelSize[1]), closing)
 
-no_green = cv2.merge((B, np.zeros_like(G), R))
+    dilation = cv2.dilate(image, kernel, iterations=1)
+    cv2.imshow("Dylatacja: ({}, {})".format(kernelSize[0], kernelSize[1]), dilation)
 
-cv2.imshow('Original', image)
-cv2.imshow('Red and Blue Swapped', swapped)
-cv2.imshow('No Green Channel', no_green)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+#Przykład ma odzwierciedlać zamazany, poszarpany napis i może nie powraca do oryginału ,ale zwiększa możliwości odczytu

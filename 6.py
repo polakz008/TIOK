@@ -1,18 +1,19 @@
 import cv2
+import numpy as np
 
-image = cv2.imread('niepelne.png', cv2.IMREAD_GRAYSCALE)
-cv2.imshow("Original", image)
-kernelSizes = [(15, 15)]
+image = cv2.imread("truskawka.png")
+mask = np.zeros(image.shape[:2], dtype="uint8")
 
-for kernelSize in kernelSizes:
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, kernelSize)
+cv2.ellipse(mask, (image.shape[1]//2, int(image.shape[0]*0.70)), (100, 160), 0, 0, 360, 255, -1)
 
-    closing = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
-    cv2.imshow("Zamykanie: ({}, {})".format(kernelSize[0], kernelSize[1]), closing)
+blurred = cv2.GaussianBlur(image, (31, 31), 0)
 
-    dilation = cv2.dilate(image, kernel, iterations=1)
-    cv2.imshow("Dylatacja: ({}, {})".format(kernelSize[0], kernelSize[1]), dilation)
+foreground = cv2.bitwise_and(image, image, mask=mask)
+inv_mask = cv2.bitwise_not(mask)
+background = cv2.bitwise_and(blurred, blurred, mask=inv_mask)
 
+final = cv2.add(foreground, background)
+
+cv2.imshow("Symulacja głębi ostrości", final)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-#Przykład ma odzwierciedlać zamazany, poszarpany napis i może nie powraca do oryginału ,ale zwiększa możliwości odczytu

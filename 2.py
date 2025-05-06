@@ -1,30 +1,49 @@
 import cv2
-image = cv2.imread('text.png', cv2.IMREAD_GRAYSCALE)
 
-_, binary = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
-
-kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-
-thickness_values = []
-iterations_list = list(range(1, 6))
-
-def calculate_thickness(img):
-    contours, _ = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    total_area = sum([cv2.contourArea(c) for c in contours])
-    total_perimeter = sum([cv2.arcLength(c, True) for c in contours])
-    if total_perimeter == 0:
-        return 0
-    return total_area / total_perimeter
-
-print("Liczba iteracji | Średnia grubość")
-print("-----------------------------------------------")
-
-for i in iterations_list:
-    dilated = cv2.dilate(binary, kernel, iterations=i)
-    thickness = calculate_thickness(dilated)
-    thickness_values.append(thickness)
-    print(f"{i:<17} | {thickness:.2f}")
-    cv2.imshow(f'Dylatacja - iteracja {i}', dilated)
-
+image = cv2.imread("kotek.png")
+cv2.imshow("Original", image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+kernelSizes = [3, 5, 9, 15]
+
+for k in kernelSizes:
+    blurred = cv2.blur(image, (k, k))
+    cv2.imshow(f"Average Blur ({k}x{k})", blurred)
+    cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+for k in kernelSizes:
+    blurred = cv2.GaussianBlur(image, (k, k), 0)
+    cv2.imshow(f"Gaussian Blur ({k}x{k})", blurred)
+    cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+for k in kernelSizes:
+    if k % 2 == 1:
+        blurred = cv2.medianBlur(image, k)
+        cv2.imshow(f"Median Blur (k={k})", blurred)
+        cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+
+for k in kernelSizes:
+    sigmaColor = k * 3
+    sigmaSpace = k * 2
+    blurred = cv2.bilateralFilter(image, d=k, sigmaColor=sigmaColor, sigmaSpace=sigmaSpace)
+    cv2.imshow(f"Bilateral Blur (d={k}, sc={sigmaColor}, ss={sigmaSpace})", blurred)
+    cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+
+"""
+Jak zmienia się efekt rozmycia w zależności od wielkości kernela?
+ Im większy kernel, tym silniejsze rozmycie.
+
+Jaki rozmiar kernela jest optymalny dla redukcji szumu bez utraty istotnych detali?
+- Average Blur:  3x3 lub 5x5 
+- Gaussian Blur: 5x5 lub 9x9 
+- Median Blur: 3 lub 5
+- Bilateral Filter: d=9–11, sigmaColor=27–33, sigmaSpace=18–22 
+
+"""
